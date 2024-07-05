@@ -86,6 +86,10 @@ local function run_roslyn(exe, target, config)
         }
     end
 
+    if vim.fn.executable(exe) == 1 then
+        cmd = { exe, "--logLevel=Information", "--extensionLogDirectory=" .. vim.fs.dirname(vim.lsp.get_log_path()) }
+    end
+
     vim.system(cmd, {
         detach = not vim.uv.os_uname().version:find("Windows"),
         stdout = function(_, data)
@@ -203,7 +207,7 @@ function M.setup(config)
 
             local exe = roslyn_config.exe
             local mason_installation = get_mason_installation()
-            if not vim.uv.fs_stat(exe) and not vim.uv.fs_stat(mason_installation) then
+            if not vim.uv.fs_stat(exe) and not vim.uv.fs_stat(mason_installation) and not vim.fn.executable(exe) then
                 return vim.notify(
                     string.format("%s not found. Refer to README on how to setup the language server", exe),
                     vim.log.levels.INFO
