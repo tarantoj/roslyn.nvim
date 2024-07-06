@@ -160,6 +160,11 @@ local function get_default_capabilities(roslyn_config)
                 dynamicRegistration = true,
             },
         },
+        workspace = {
+            diagnostic = {
+                dynamicRegistration = true,
+            },
+        },
     })
 end
 
